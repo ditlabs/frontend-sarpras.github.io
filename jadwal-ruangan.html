@@ -6,10 +6,16 @@
     <title>Jadwal Ruangan - Sistem Peminjaman Sarpras</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css">
+
     <style>
         body { font-family: 'Inter', sans-serif; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* Style agar font kalender mengikuti font website */
+        .flatpickr-calendar { font-family: 'Inter', sans-serif; }
     </style>
 </head>
 <body class="bg-orange-50 text-gray-800 min-h-screen pb-12">
@@ -55,11 +61,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
                         <div>
                             <label class="block text-xs font-semibold text-orange-500 uppercase tracking-widest mb-2">Tanggal Mulai</label>
-                            <input type="date" id="startDate" class="w-full px-4 py-3 border border-orange-100 rounded-2xl focus:ring-2 focus:ring-orange-300 focus:outline-none">
+                            <input type="text" id="startDate" placeholder="Pilih tanggal..." class="w-full px-4 py-3 border border-orange-100 rounded-2xl focus:ring-2 focus:ring-orange-300 focus:outline-none bg-white">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-orange-500 uppercase tracking-widest mb-2">Tanggal Selesai</label>
-                            <input type="date" id="endDate" class="w-full px-4 py-3 border border-orange-100 rounded-2xl focus:ring-2 focus:ring-orange-300 focus:outline-none">
+                            <input type="text" id="endDate" placeholder="Pilih tanggal..." class="w-full px-4 py-3 border border-orange-100 rounded-2xl focus:ring-2 focus:ring-orange-300 focus:outline-none bg-white">
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
@@ -117,6 +123,9 @@
         </section>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/id.js"></script>
+
     <script src="assets/js/api.legacy.js"></script>
     <script>
         checkAuth();
@@ -130,6 +139,19 @@
         const statPending = document.getElementById('stat-pending');
         const tbody = document.getElementById('jadwalTable');
 
+        // --- 4. KONFIGURASI FLATPICKR ---
+        const dateConfig = {
+            dateFormat: "Y-m-d",    // Format data untuk dikirim ke JS/Backend (2025-11-25)
+            altInput: true,         // Aktifkan tampilan alternatif
+            altFormat: "j F Y",     // Tampilan User (25 November 2025) - Bisa ganti "d-m-Y" jika mau angka saja
+            locale: "id",           // Bahasa Indonesia
+            allowInput: true        // Mengizinkan user mengetik manual jika mau
+        };
+
+        // Inisialisasi Flatpickr dan simpan ke variabel agar bisa di-reset nanti
+        const fpStart = flatpickr("#startDate", dateConfig);
+        const fpEnd = flatpickr("#endDate", dateConfig);
+
         function getDefaultRange() {
             const today = new Date();
             const nextMonth = new Date(today);
@@ -142,8 +164,11 @@
 
         function resetRange() {
             const range = getDefaultRange();
-            startInput.value = range.start;
-            endInput.value = range.end;
+            
+            // Update menggunakan method Flatpickr
+            fpStart.setDate(range.start);
+            fpEnd.setDate(range.end);
+            
             loadJadwal();
         }
 
@@ -175,6 +200,7 @@
         }
 
         async function loadJadwal() {
+            // Flatpickr otomatis mengupdate value input asli (hidden), jadi ini tetap aman
             const start = startInput.value;
             const end = endInput.value;
 
@@ -187,8 +213,9 @@
             tableIndicator.className = 'text-xs font-semibold rounded-full px-4 py-1.5 bg-orange-50 text-orange-600 border border-orange-100';
 
             try {
-                const startISO = new Date(start).toISOString();
-                const endISO = new Date(end).toISOString();
+                // Tambahkan waktu 00:00 dan 23:59 agar range mencakup seluruh hari
+                const startISO = new Date(start + 'T00:00:00').toISOString();
+                const endISO = new Date(end + 'T23:59:59').toISOString();
 
                 updatePeriodLabel(start, end);
 
