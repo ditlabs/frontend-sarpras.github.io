@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar - Sistem Peminjaman Sarpras</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gradient-to-br from-green-50 to-emerald-100 min-h-screen flex items-center justify-center">
     <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-lg">
         <div class="text-center mb-8">
@@ -41,14 +43,16 @@
             <div>
                 <div class="flex items-center justify-between mb-1">
                     <label class="block text-sm font-medium text-gray-700">Kode Organisasi (opsional)</label>
-                    <a href="pendaftaran-organisasi.html" class="text-xs text-green-600 hover:text-green-800 font-semibold">
+                    <a href="pendaftaran-organisasi.html"
+                        class="text-xs text-green-600 hover:text-green-800 font-semibold">
                         Daftarkan organisasi
                     </a>
                 </div>
                 <input type="text" id="organisasiKode"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    placeholder="Contoh: HMJ-IF, UKM-MUSIK">
-                <p class="text-xs text-gray-400 mt-1">Isi dengan kode organisasi yang sudah terdaftar (lihat admin / sarpras).</p>
+                    placeholder="Contoh: ORMAWA-IF, UKM-MUSIK">
+                <p class="text-xs text-gray-400 mt-1">Isi dengan kode organisasi yang sudah terdaftar (lihat admin /
+                    sarpras).</p>
             </div>
 
             <button type="submit"
@@ -112,4 +116,5 @@
         });
     </script>
 </body>
+
 </html>
