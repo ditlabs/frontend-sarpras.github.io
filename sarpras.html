@@ -65,7 +65,7 @@
             </div>
         </section>
 
-        <section class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <section class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             <a href="verifikasi-peminjaman.html"
                 class="bg-white border border-orange-100 rounded-3xl p-6 shadow-sm hover:shadow-md transition flex flex-col gap-4 group">
                 <div
@@ -153,9 +153,75 @@
                 </div>
                 <div>
                     <h3 class="text-lg font-bold text-gray-900">Daftar Organisasi</h3>
-                    <p class="text-sm text-gray-500">Pendaftaran HMJ, UKM, BEM, MPM</p>
+                    <p class="text-sm text-gray-500">Pendaftaran ORMAWA, UKM</p>
                 </div>
             </a>
+        </section>
+
+        <section class="grid gap-6 lg:grid-cols-[3fr,2fr] items-stretch">
+            <div class="bg-white rounded-3xl shadow-sm border border-orange-100 overflow-hidden flex flex-col">
+                <div
+                    class="p-6 border-b border-orange-100 flex flex-col gap-4 md:flex-row md:items-center md:justify-between bg-orange-50/60">
+                    <div>
+                        <p class="text-xs uppercase tracking-widest text-orange-500 font-semibold">Kalender Aktivitas
+                        </p>
+                        <h2 id="month-year-label" class="text-2xl font-bold text-gray-900 capitalize">Memuat...</h2>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="changeMonth(-1)"
+                            class="p-3 bg-white border border-orange-200 rounded-2xl hover:bg-orange-50 hover:shadow-sm text-orange-600 transition-all">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <button onclick="changeMonth(1)"
+                            class="p-3 bg-white border border-orange-200 rounded-2xl hover:bg-orange-50 hover:shadow-sm text-orange-600 transition-all">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-6 flex-1">
+                    <div
+                        class="grid grid-cols-7 text-center mb-4 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                        <span>Min</span>
+                        <span>Sen</span>
+                        <span>Sel</span>
+                        <span>Rab</span>
+                        <span>Kam</span>
+                        <span>Jum</span>
+                        <span>Sab</span>
+                    </div>
+
+                    <div id="calendar-grid" class="grid grid-cols-7 text-center gap-y-3 gap-x-2">
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+                <div class="p-6 border-b border-orange-100 flex flex-col gap-2">
+                    <p class="text-xs uppercase tracking-widest text-orange-500 font-semibold">Jadwal Harian</p>
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-semibold text-gray-900">Agenda Tanggal Terpilih</h3>
+                        <span id="selected-date-label"
+                            class="inline-flex flex-col items-center justify-center text-sm font-semibold text-orange-600 bg-orange-50 px-4 py-1.5 rounded-full border border-orange-100 text-center leading-tight min-w-[140px]">
+                            Hari Ini
+                        </span>
+                    </div>
+                    <p class="text-xs text-gray-500">Klik tanggal pada kalender untuk menampilkan detail kegiatan pada
+                        ruangan.</p>
+                </div>
+
+                <div id="jadwal-list-container" class="p-6 space-y-4 flex-1 overflow-y-auto no-scrollbar"
+                    style="max-height: 500px;">
+                    <p class="text-center text-gray-400 text-sm py-8 italic">Pilih tanggal di atas untuk melihat detail.
+                    </p>
+                </div>
+            </div>
         </section>
 
         <section class="bg-white rounded-3xl shadow-sm border border-orange-100 p-8">
@@ -188,6 +254,7 @@
     </main>
 
     <script src="assets/js/api.legacy.js"></script>
+    <script src="assets/js/calendar-widget.js"></script>
     <script>
         // Cek Auth saat halaman dimuat
         checkAuth();
