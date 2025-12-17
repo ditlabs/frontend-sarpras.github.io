@@ -146,7 +146,7 @@ const showScheduleForDate = (day, month, year) => {
              
              <div class="mb-4">
                  <h4 class="font-bold text-gray-800 text-lg leading-tight mb-1 group-hover:text-orange-600 transition-colors">
-                    ${j.kegiatan || j.keperluan || 'Penggunaan Ruangan'}
+                    ${j.kegiatan?.nama_kegiatan || 'Penggunaan Ruangan'}
                  </h4>
                  <div class="flex items-center gap-2 text-sm text-gray-500">
                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>

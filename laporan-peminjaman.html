@@ -7,6 +7,8 @@
     <title>Laporan Peminjaman - Sistem Peminjaman Sarpras</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -82,27 +84,15 @@
                         <label
                             class="block text-[10px] sm:text-xs font-bold text-orange-500 uppercase tracking-wider mb-1.5 sm:mb-2">Tanggal
                             Mulai</label>
-                        <div class="relative">
-                            <input type="date" id="startDate"
-                                class="w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-300 focus:border-orange-400 focus:outline-none bg-white transition-all cursor-pointer opacity-0 absolute inset-0 z-10">
-                            <div id="startDateDisplay"
-                                class="w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-xl bg-white text-gray-700 font-medium cursor-pointer hover:border-orange-300 transition-all">
-                                Pilih tanggal...
-                            </div>
-                        </div>
+                        <input type="text" id="startDate"
+                            class="w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-300 focus:border-orange-400 focus:outline-none bg-white transition-all cursor-pointer hover:border-orange-300">
                     </div>
                     <div>
                         <label
                             class="block text-[10px] sm:text-xs font-bold text-orange-500 uppercase tracking-wider mb-1.5 sm:mb-2">Tanggal
                             Selesai</label>
-                        <div class="relative">
-                            <input type="date" id="endDate"
-                                class="w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-300 focus:border-orange-400 focus:outline-none bg-white transition-all cursor-pointer opacity-0 absolute inset-0 z-10">
-                            <div id="endDateDisplay"
-                                class="w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-xl bg-white text-gray-700 font-medium cursor-pointer hover:border-orange-300 transition-all">
-                                Pilih tanggal...
-                            </div>
-                        </div>
+                        <input type="text" id="endDate"
+                            class="w-full px-4 py-3 text-sm border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-300 focus:border-orange-400 focus:outline-none bg-white transition-all cursor-pointer hover:border-orange-300">
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
@@ -213,6 +203,8 @@
     </div>
 
     <script src="assets/js/api.legacy.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/id.js"></script>
     <script>
         checkAuth();
 
@@ -237,9 +229,8 @@
             const nextMonth = new Date(today);
             nextMonth.setMonth(nextMonth.getMonth() + 1);
 
-            document.getElementById('startDate').value = today.toISOString().split('T')[0];
-            document.getElementById('endDate').value = nextMonth.toISOString().split('T')[0];
-            updateDateDisplay();
+            startDatePicker.setDate(today);
+            endDatePicker.setDate(nextMonth);
         }
 
         // Reset filter
@@ -248,12 +239,22 @@
             loadLaporan();
         }
 
-        // Event listeners for date changes
-        document.getElementById('startDate').addEventListener('change', updateDateDisplay);
-        document.getElementById('endDate').addEventListener('change', updateDateDisplay);
+        // Initialize Flatpickr date pickers
+        const startDatePicker = flatpickr("#startDate", {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "j F Y",
+            locale: "id",
+            defaultDate: new Date()
+        });
 
-        // Initialize dates
-        setDefaultDates();
+        const endDatePicker = flatpickr("#endDate", {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "j F Y",
+            locale: "id",
+            defaultDate: new Date(new Date().setMonth(new Date().getMonth() + 1))
+        });
 
         async function loadLaporan() {
             const start = document.getElementById('startDate').value;

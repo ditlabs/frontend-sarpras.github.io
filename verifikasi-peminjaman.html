@@ -162,7 +162,7 @@
                                 </div>
                             </div>
 
-                            <!-- Keperluan -->
+                            <!-- Nama Kegiatan -->
                             <div
                                 class="flex items-start gap-4 p-4 bg-purple-50/50 rounded-2xl border border-purple-100">
                                 <div
@@ -174,7 +174,8 @@
                                     </svg>
                                 </div>
                                 <div class="flex-1">
-                                    <p class="text-xs font-bold text-purple-600 uppercase tracking-wider mb-1">Keperluan
+                                    <p class="text-xs font-bold text-purple-600 uppercase tracking-wider mb-1">Nama
+                                        Kegiatan
                                     </p>
                                     <p id="detailKeperluan" class="text-gray-700 leading-relaxed">-</p>
                                 </div>
@@ -400,7 +401,7 @@
                 document.getElementById('detailPeminjam').textContent = data.peminjam ? data.peminjam.nama : 'N/A';
                 document.getElementById('detailEmail').textContent = data.peminjam ? data.peminjam.email : '';
                 document.getElementById('detailWaktu').textContent = `${new Date(data.tanggal_mulai).toLocaleString('id-ID')} — ${new Date(data.tanggal_selesai).toLocaleString('id-ID')}`;
-                document.getElementById('detailKeperluan').textContent = data.keperluan || '-';
+                document.getElementById('detailKeperluan').textContent = data.kegiatan?.nama_kegiatan || '-';
 
                 // List Barang
                 if (data.barang && data.barang.length > 0) {

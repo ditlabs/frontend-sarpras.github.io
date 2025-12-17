@@ -34,25 +34,28 @@
 
 <body class="bg-orange-50 text-gray-800 min-h-screen pb-12">
     <nav class="bg-white/95 backdrop-blur border-b border-orange-100 sticky top-0 z-40 shadow-sm">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <div class="flex items-center gap-3">
+        <div
+            class="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex flex-col gap-2 sm:gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex items-center gap-2 sm:gap-3">
                 <img src="https://raw.githubusercontent.com/saripudin14/img/refs/heads/main/logo.png" alt="Logo Sarpras"
-                    class="w-12 h-12 rounded-2xl border border-orange-100 shadow-lg shadow-orange-200/70 object-contain bg-white/70 p-2">
+                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl border border-orange-100 shadow-lg shadow-orange-200/70 object-contain bg-white/70 p-1.5 sm:p-2">
                 <div>
-                    <p class="text-xs uppercase tracking-widest text-orange-500 font-semibold">Unit Sarana & Prasarana
+                    <p class="text-[10px] sm:text-xs uppercase tracking-widest text-orange-500 font-semibold">Unit
+                        Sarana & Prasarana
                     </p>
-                    <h1 class="text-xl font-bold text-gray-900 tracking-tight">Jadwal Ruangan</h1>
+                    <h1 class="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">Jadwal Ruangan</h1>
                 </div>
             </div>
-            <div class="flex gap-3">
-                <button onclick="window.location.href='dashboard-mahasiswa.html'"
-                    class="px-4 py-2 rounded-lg border border-orange-200 text-sm font-semibold text-orange-600 bg-white hover:bg-orange-50 hover:border-orange-300 transition">
-                    Kembali ke Dashboard
-                </button>
-                <button onclick="logout()"
-                    class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-5 rounded-lg text-sm transition-colors shadow-md shadow-orange-200/80">
-                    Logout
-                </button>
+            <div class="flex gap-2 sm:gap-3">
+                <a href="dashboard-mahasiswa.html"
+                    class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl border border-orange-200 flex items-center justify-center text-orange-600 bg-white hover:bg-orange-50 hover:border-orange-300 transition-all shadow-sm"
+                    title="Kembali ke Dashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                </a>
             </div>
         </div>
     </nav>
@@ -117,25 +120,6 @@
                             Filter</button>
                     </div>
                 </div>
-            </div>
-
-            <div class="grid gap-4 md:grid-cols-3">
-                <div class="bg-white rounded-3xl border border-orange-100 p-4 shadow-sm">
-                    <p class="text-xs uppercase tracking-[0.35em] text-orange-500 font-semibold mb-2">Total Jadwal</p>
-                    <p id="stat-total" class="text-3xl font-bold text-gray-900">0</p>
-                    <p class="text-xs text-gray-500 mt-1">Dalam rentang waktu terpilih</p>
-                </div>
-                <div class="bg-white rounded-3xl border border-green-100 p-4 shadow-sm">
-                    <p class="text-xs uppercase tracking-[0.35em] text-green-600 font-semibold mb-2">Approved</p>
-                    <p id="stat-approved" class="text-3xl font-bold text-gray-900">0</p>
-                    <p class="text-xs text-gray-500 mt-1">Jadwal yang sudah disetujui</p>
-                </div>
-                <div class="bg-white rounded-3xl border border-yellow-100 p-4 shadow-sm">
-                    <p class="text-xs uppercase tracking-[0.35em] text-yellow-600 font-semibold mb-2">Pending</p>
-                    <p id="stat-pending" class="text-3xl font-bold text-gray-900">0</p>
-                    <p class="text-xs text-gray-500 mt-1">Menunggu persetujuan</p>
-                </div>
-            </div>
         </section>
 
         <section class="bg-white rounded-3xl shadow-sm border border-orange-100 overflow-hidden">
@@ -158,6 +142,7 @@
                             <th class="px-6 py-4">Tanggal Mulai</th>
                             <th class="px-6 py-4">Tanggal Selesai</th>
                             <th class="px-6 py-4">Peminjam</th>
+                            <th class="px-6 py-4">Organisasi</th>
                             <th class="px-6 py-4 text-center">Status</th>
                         </tr>
                     </thead>
@@ -182,9 +167,6 @@
         const endInput = document.getElementById('endDate');
         const periodLabel = document.getElementById('active-period');
         const tableIndicator = document.getElementById('table-indicator');
-        const statTotal = document.getElementById('stat-total');
-        const statApproved = document.getElementById('stat-approved');
-        const statPending = document.getElementById('stat-pending');
         const tbody = document.getElementById('jadwalTable');
 
         // --- 4. KONFIGURASI FLATPICKR ---
@@ -255,15 +237,6 @@
             });
         }
 
-        function updateStats(data) {
-            const total = data.length;
-            const approved = data.filter(item => item.status === 'APPROVED').length;
-            const pending = data.filter(item => item.status === 'PENDING').length;
-
-            statTotal.textContent = total;
-            statApproved.textContent = approved;
-            statPending.textContent = pending;
-        }
 
         async function loadJadwal() {
             // Flatpickr otomatis mengupdate value input asli (hidden), jadi ini tetap aman
@@ -287,8 +260,6 @@
 
                 const data = await apiCall(`/jadwal-ruangan?start=${encodeURIComponent(startISO)}&end=${encodeURIComponent(endISO)}`);
 
-                updateStats(Array.isArray(data) ? data : []);
-
                 if (Array.isArray(data) && data.length > 0) {
                     tbody.innerHTML = data.map(j => `
                         <tr class="hover:bg-orange-50/70 transition-colors">
@@ -299,6 +270,7 @@
                             <td class="px-6 py-4 text-sm font-medium text-gray-800">${formatDateTime(j.tanggal_mulai)}</td>
                             <td class="px-6 py-4 text-sm font-medium text-gray-800">${formatDateTime(j.tanggal_selesai)}</td>
                             <td class="px-6 py-4 text-sm text-gray-700">${j.peminjam || '-'}</td>
+                            <td class="px-6 py-4 text-sm text-gray-700">${j.organisasi || '-'}</td>
                             <td class="px-6 py-4 text-center">
                                 <span class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-semibold rounded-full border ${getStatusBadgeColor(j.status)}">
                                     ${j.status || '-'}

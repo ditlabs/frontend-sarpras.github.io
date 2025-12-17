@@ -27,21 +27,28 @@
 
 <body class="bg-orange-50 text-gray-800 min-h-screen pb-12">
     <nav class="bg-white/95 backdrop-blur border-b border-orange-100 sticky top-0 z-40 shadow-sm">
-        <div class="max-w-5xl mx-auto px-6 py-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <div class="flex items-center gap-3">
+        <div
+            class="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex flex-col gap-2 sm:gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex items-center gap-2 sm:gap-3">
                 <img src="https://raw.githubusercontent.com/saripudin14/img/refs/heads/main/logo.png" alt="Logo Sarpras"
-                    class="w-12 h-12 rounded-2xl border border-orange-100 shadow-lg shadow-orange-200/70 object-contain bg-white/70 p-2">
+                    class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl border border-orange-100 shadow-lg shadow-orange-200/70 object-contain bg-white/70 p-1.5 sm:p-2">
                 <div>
-                    <p class="text-xs uppercase tracking-widest text-orange-500 font-semibold">Unit Sarana & Prasarana
+                    <p class="text-[10px] sm:text-xs uppercase tracking-widest text-orange-500 font-semibold">Unit
+                        Sarana & Prasarana
                     </p>
-                    <h1 class="text-xl font-bold text-gray-900 tracking-tight">Form Pengajuan</h1>
+                    <h1 class="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">Form Pengajuan</h1>
                 </div>
             </div>
-            <div class="flex gap-3">
+            <div class="flex gap-2 sm:gap-3">
                 <a href="dashboard-mahasiswa.html"
-                    class="px-4 py-2 rounded-lg border border-orange-200 text-sm font-semibold text-orange-600 bg-white hover:bg-orange-50 hover:border-orange-300 transition">Kembali</a>
-                <button onclick="logout()"
-                    class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-5 rounded-lg text-sm transition-colors shadow-md shadow-orange-200/80">Logout</button>
+                    class="w-10 h-10 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl border border-orange-200 flex items-center justify-center text-orange-600 bg-white hover:bg-orange-50 hover:border-orange-300 transition-all shadow-sm"
+                    title="Kembali ke Dashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                </a>
             </div>
         </div>
     </nav>
@@ -95,10 +102,20 @@
                 </div>
 
                 <div>
-                    <label for="keperluan"
-                        class="block text-xs font-semibold text-orange-500 uppercase tracking-widest mb-2">Keperluan
+                    <label for="nama_kegiatan"
+                        class="block text-xs font-semibold text-orange-500 uppercase tracking-widest mb-2">Nama Kegiatan
                         *</label>
-                    <textarea id="keperluan" name="keperluan" rows="4" required
+                    <input type="text" id="nama_kegiatan" name="nama_kegiatan" required
+                        placeholder="Contoh: Rapat Kerja BEM"
+                        class="w-full px-4 py-3 border border-orange-100 rounded-2xl focus:ring-2 focus:ring-orange-300 focus:outline-none bg-white">
+                </div>
+
+                <div>
+                    <label for="deskripsi"
+                        class="block text-xs font-semibold text-orange-500 uppercase tracking-widest mb-2">Deskripsi
+                        Kegiatan (Opsional)</label>
+                    <textarea id="deskripsi" name="deskripsi" rows="3"
+                        placeholder="Jelaskan secara singkat kegiatan yang akan dilakukan..."
                         class="w-full px-4 py-3 border border-orange-100 rounded-2xl focus:ring-2 focus:ring-orange-300 focus:outline-none bg-white"></textarea>
                 </div>
 
@@ -141,6 +158,13 @@
             </form>
         </section>
     </main>
+
+    <!-- Toast Notification -->
+    <div id="toast"
+        class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 z-50 transition-all duration-300 opacity-0 translate-y-4 pointer-events-none">
+        <div id="toastIcon" class="w-6 h-6 flex items-center justify-center"></div>
+        <span id="toastMessage" class="text-sm font-medium"></span>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/id.js"></script>
@@ -342,12 +366,12 @@
             const formData = new FormData(e.target);
 
             if (selectedDateObjects.length === 0) {
-                alert("Mohon pilih setidaknya satu tanggal.");
+                showToast('Mohon pilih setidaknya satu tanggal.', 'error');
                 return;
             }
 
             if (!suratFile) {
-                alert("Mohon unggah surat digital (PDF) terlebih dahulu.");
+                showToast('Mohon unggah surat digital (PDF) terlebih dahulu.', 'error');
                 return;
             }
 
@@ -357,11 +381,11 @@
                 const endVal = document.getElementById(`end_${i}`).value;
 
                 if (!startVal || !endVal) {
-                    alert(`Mohon lengkapi jam mulai dan selesai untuk tanggal ke-${i + 1}.`);
+                    showToast(`Mohon lengkapi jam mulai dan selesai untuk tanggal ke-${i + 1}.`, 'error');
                     return;
                 }
                 if (startVal >= endVal) {
-                    alert(`Jam selesai harus lebih besar dari jam mulai pada tanggal ke-${i + 1}.`);
+                    showToast(`Jam selesai harus lebih besar dari jam mulai pada tanggal ke-${i + 1}.`, 'error');
                     return;
                 }
             }
@@ -399,7 +423,8 @@
                         kode_ruangan: formData.get('ruangan_id') || null,
                         tanggal_mulai: fullStartDate.toISOString(),
                         tanggal_selesai: fullEndDate.toISOString(),
-                        keperluan: formData.get('keperluan'),
+                        nama_kegiatan: formData.get('nama_kegiatan'),
+                        deskripsi: formData.get('deskripsi') || '',
                         surat_digital_url: SURAT_PLACEHOLDER,
                         barang: barang
                     };
@@ -413,8 +438,10 @@
                     await uploadSuratDigital(peminjamanBaru.kode_peminjaman, suratFile);
                 }
 
-                alert('Semua jadwal berhasil diajukan!');
-                window.location.href = 'riwayat-peminjaman.html';
+                showToast('Semua jadwal berhasil diajukan!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'riwayat-peminjaman.html';
+                }, 1500);
 
             } catch (error) {
                 console.error(error);
@@ -450,6 +477,26 @@
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             window.location.href = 'index.html';
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastMessage = document.getElementById('toastMessage');
+
+            toastMessage.textContent = message;
+
+            if (type === 'success') {
+                toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 z-50 transition-all duration-300';
+                toastIcon.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+            } else {
+                toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-gradient-to-r from-red-500 to-red-600 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 z-50 transition-all duration-300';
+                toastIcon.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>';
+            }
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+            }, 3000);
         }
 
         loadRuangan();
